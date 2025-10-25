@@ -43,6 +43,8 @@ const Navbar: React.FC = () => {
     }
   };
 
+  const overHero = !scrolled;
+
   return (
     <header 
       className={`sticky top-0 z-50 transition-all duration-300 ${
@@ -59,7 +61,7 @@ const Navbar: React.FC = () => {
                 <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
               </svg>
             </div>
-            <span className="text-xl font-bold">PrimeAdView</span>
+            <span className={`text-xl font-bold ${overHero ? 'text-white' : 'text-foreground'}`}>PrimeAdView</span>
           </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
@@ -71,7 +73,7 @@ const Navbar: React.FC = () => {
                   e.preventDefault();
                   handleNavClick(link.to);
                 }}
-                className="nav-link py-2 px-3 rounded-md hover:bg-primary/5 transition-all duration-300"
+                className={`nav-link py-2 px-3 rounded-md hover:bg-primary/5 transition-all duration-300 ${overHero ? 'text-white/90' : 'text-foreground'}`}
               >
                 {link.name}
               </a>
@@ -85,7 +87,7 @@ const Navbar: React.FC = () => {
                   as="a" 
                   to="/dashboard" 
                   variant="outline" 
-                  className="px-5 py-2.5 border-primary/60 text-primary hover:bg-primary/10 font-medium rounded-lg shadow-sm"
+                  className={`px-5 py-2.5 font-medium rounded-lg shadow-sm ${overHero ? 'border-white/30 text-white hover:bg-white/5' : 'border-primary/60 text-primary hover:bg-primary/10'}`}
                 >
                   <LayoutDashboard className="h-4 w-4 mr-2" />
                   Dashboard
@@ -93,7 +95,7 @@ const Navbar: React.FC = () => {
                 <Button 
                   onClick={handleSignOut} 
                   variant="primary" 
-                  className="px-6 py-2.5 font-medium rounded-lg shadow-md hover:shadow-lg"
+                  className={`px-6 py-2.5 font-medium rounded-lg shadow-md hover:shadow-lg ${overHero ? 'bg-success text-white' : ''}`}
                 >
                   Sign Out
                 </Button>
@@ -104,7 +106,7 @@ const Navbar: React.FC = () => {
                   as="a" 
                   to="/login" 
                   variant="outline" 
-                  className="px-5 py-2 border-primary/60 text-primary hover:bg-primary/5 font-medium"
+                  className={`px-5 py-2 font-medium ${overHero ? 'border-white/40 text-white hover:bg-white/5' : 'border-primary/60 text-primary hover:bg-primary/5'}`}
                 >
                   Sign In
                 </Button>
@@ -112,7 +114,7 @@ const Navbar: React.FC = () => {
                   as="a" 
                   to="/signup" 
                   variant="primary" 
-                  className="px-5 py-2 font-medium"
+                  className={`px-5 py-2 font-medium ${overHero ? 'bg-success text-white' : ''}`}
                 >
                   Sign Up
                 </Button>
@@ -121,7 +123,7 @@ const Navbar: React.FC = () => {
             <button
               onClick={toggle}
               aria-label="Toggle theme"
-              className="p-2 rounded-full bg-background/10 hover:bg-background/20 text-foreground/80 hover:text-foreground transition-colors ring-1 ring-border hover:ring-primary/30"
+              className={`p-2 rounded-full ${overHero ? 'bg-white/6 text-white/90 hover:bg-white/8' : 'bg-background/10 text-foreground/80 hover:bg-background/20'} transition-colors ring-1 ring-border hover:ring-primary/30`}
             >
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
