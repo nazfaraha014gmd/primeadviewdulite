@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
@@ -48,6 +48,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [user, fetchProfile]);
 
   useEffect(() => {
+    let cancelled = false;
+    // Fallback: ensure we never keep the app in a perpetual loading state
+    const fallbackTimer = setTimeout(() => {
+      if (!cancelled) setLoading(false);
+    }, 5000);
+
     const getSession = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -59,7 +65,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } catch (e: any) {
         console.warn('Error getting session:', e?.message || e);
       } finally {
-        setLoading(false);
+        clearTimeout(fallbackTimer);
+        if (!cancelled) setLoading(false);
       }
     };
 
@@ -77,11 +84,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } catch (e: any) {
         console.warn('Auth state change error:', e?.message || e);
       } finally {
-        setLoading(false);
+        clearTimeout(fallbackTimer);
+        if (!cancelled) setLoading(false);
       }
     });
 
     return () => {
+      cancelled = true;
+      clearTimeout(fallbackTimer);
       authListener.subscription.unsubscribe();
     };
   }, [fetchProfile]);
