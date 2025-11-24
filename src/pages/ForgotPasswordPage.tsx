@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
+import { getSafeRedirectOrigin } from '../lib/urls';
 import Button from '../components/ui/Button';
 import { Mail, Loader2, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -13,9 +14,9 @@ const ForgotPasswordPage: React.FC = () => {
   const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+    const redirectBase = getSafeRedirectOrigin();
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: `${redirectBase}/reset-password`,
     });
 
     setLoading(false);

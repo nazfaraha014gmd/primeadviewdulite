@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
+import { getSafeRedirectOrigin } from '../lib/urls';
 import Button from '../components/ui/Button';
 import { Mail, Lock, Loader2 } from 'lucide-react';
 
@@ -50,10 +51,11 @@ const LoginPage: React.FC = () => {
   
   const handleGoogleLogin = async () => {
     setLoading(true);
+    const redirectBase = getSafeRedirectOrigin();
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/dashboard`
+        redirectTo: `${redirectBase}/dashboard`
       }
     });
     setLoading(false);

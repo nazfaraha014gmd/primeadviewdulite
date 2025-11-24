@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
+import { getSafeRedirectOrigin } from '../lib/urls';
 import Button from '../components/ui/Button';
 import { Mail, Lock, User, Loader2 } from 'lucide-react';
 
@@ -40,6 +41,7 @@ const SignUpPage: React.FC = () => {
     setError(null);
     setMessage(null);
     try {
+      const redirectBase = getSafeRedirectOrigin();
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -47,7 +49,7 @@ const SignUpPage: React.FC = () => {
           data: {
             full_name: fullName,
           },
-          emailRedirectTo: `${window.location.origin}/dashboard`
+          emailRedirectTo: `${redirectBase}/dashboard`
         },
       });
       if (error) throw error;
